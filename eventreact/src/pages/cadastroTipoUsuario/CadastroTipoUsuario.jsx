@@ -1,17 +1,18 @@
-import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
-import Lista from "../../components/lista/Lista";
+import Imagem from "../../assests/img/cadastrousuario.png"
 import Cadastro from "../../components/cadastro/Cadastro";
-import Img from "../../assests/img/cadastrotipoevento.png"
+import Footer from "../../components/footer/Footer";
+import Header from "../../components/header/Header";
+import Lista from "../../components/lista/Lista";
 import api from "../../Services/services";
 import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 
 
-const CadastroTipoEvento = () => {
+const CadastroTipoUsuario = () => {
 
-    const [tipoEvento, setTipoEvento] = useState("")
-    const [listaTipoEvento, setListaTipoEvento] = useState([])
+
+    const [tipoUsuario, setTipoUsuario] = useState("")
+    const [listaTipoUsuario, setListaTipoUsuario] = useState([])
 
 
     function alertar(icone, mensagem) {
@@ -53,16 +54,16 @@ const CadastroTipoEvento = () => {
 
     }
 
-    async function cadastrarTipoEvento(evt) {
+    async function cadastrarTipoUsuario(evt) {
         evt.preventDefault();
 
-        if (tipoEvento.trim() != "") {
+        if (tipoUsuario.trim() != "") {
 
             try {
 
-                await api.post("tiposEventos", { tituloTipoEvento: tipoEvento });
+                await api.post("tiposUsuarios", { tituloTipoUsuario: tipoUsuario });
                 alertar("success", "Cadastrado com sucesso!")
-                setTipoEvento("");
+                setTipoUsuario("");
 
             } catch (error) {
                 console.log(error);
@@ -75,19 +76,16 @@ const CadastroTipoEvento = () => {
 
     }
 
-
-    async function listarTipoEvento() {
+    async function listarTipoUsuario() {
         try {
-
-            const resposta = await api.get("tiposEventos");
-            setListaTipoEvento(resposta.data);
+            const resposta = await api.get("tiposUsuarios");
+            setListaTipoUsuario(resposta.data);
         } catch (error) {
             console.log(error);
         }
     }
 
-
-    async function deletarTipoEvento(tipoeventoId) {
+    async function deletarTipoUsuario(tipoUsuarioId) {
         try {
 
             Swal.fire({
@@ -99,8 +97,8 @@ const CadastroTipoEvento = () => {
                 confirmButtonText: "Sim, delete isso!"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    await api.delete(`tiposEventos/${tipoeventoId.idTipoEvento}`);
-                    alertar("success", "Gênero Excluido!")
+                    await api.delete(`tiposUsuarios/${tipoUsuarioId.idTipoUsuario}`);
+                    alertar("success", "Usuario Excluido!")
                 }
             });
 
@@ -111,14 +109,13 @@ const CadastroTipoEvento = () => {
 
     }
 
+    async function editarTipoUsuario(tipoUsuario) {
 
-    async function editarTipoEvento(tipoEvento) {
-
-        const { value: novoTipoEvento } = await Swal.fire({
+        const { value: novoTipoUsuario } = await Swal.fire({
             title: "Edite seu evento",
             input: "text",
-            inputLabel: "Novo Tipo Evento",
-            inputValue: tipoEvento.tituloTipoEvento,
+            inputLabel: "Novo Tipo De Usuario",
+            inputValue: tipoUsuario.tituloTipoUsuario,
             showCancelButton: true,
             inputValidator: (value) => {
                 if (!value) {
@@ -126,10 +123,10 @@ const CadastroTipoEvento = () => {
                 }
             }
         });
-        if (novoTipoEvento) {
+        if (novoTipoUsuario) {
             try {
-                api.put(`tiposEventos/${tipoEvento.idTipoEvento}`, { tituloTipoEvento: novoTipoEvento });
-                Swal.fire(`O evento modificado ${novoTipoEvento}`);
+                api.put(`tiposUsuarios/${tipoUsuario.idTipoUsuario}`, { tituloTipoUsuario: novoTipoUsuario });
+                Swal.fire(`O usuario modificado ${novoTipoUsuario}`);
             } catch (error) {
                 console.log(error);
 
@@ -138,47 +135,48 @@ const CadastroTipoEvento = () => {
     }
 
     useEffect(() => {
-        listarTipoEvento()
-    }, [listaTipoEvento]);
+        listarTipoUsuario()
+    }, [listaTipoUsuario]);
+
 
     return (
         <>
             <Header />
             <main>
                 <Cadastro
-                    tituloCadastro="Cadastro Tipo De Eventos"
+                    tituloCadastro="Cadastro Tipo De Usuarios"
                     visibilidade="none"
                     NomeBotao="Cadastrar"
-                    img_banner={Img}
+                    img_banner={Imagem}
                     campoPlaceholder="Titulo"
 
-                    funcCadastro={cadastrarTipoEvento}
+                    funcCadastro={cadastrarTipoUsuario}
 
-                    valorInput={tipoEvento}
-                    setValorInput={setTipoEvento}
+                    valorInput={tipoUsuario}
+                    setValorInput={setTipoUsuario}
+
                 />
 
                 <Lista
-
-                    listatitulo="Lista Tipo De Eventos"
+                    listatitulo="Lista Tipo De Usuario"
                     titulocoluna="Titulo"
-                    // titulo="Tipo Evento"
-                    // titulo1="Titulo Evento"
+                    //titulo = "Tipo Evento"
+                    //titulo1 = "Tipo Usuario"
 
-                    lista={listaTipoEvento}
-                    tipoLista="TiposEventos"
+                    lista={listaTipoUsuario}
+                    tipoLista="TiposUsuarios"
 
-                    funcExcluir={deletarTipoEvento}
-                    funcEditar={editarTipoEvento}
+                    funcExcluir={deletarTipoUsuario}
+                    funcEditar={editarTipoUsuario}
                     visibilidade2="none"
+
                 />
 
-
-
             </main>
+
             <Footer />
         </>
     )
 }
 
-export default CadastroTipoEvento;
+export default CadastroTipoUsuario;

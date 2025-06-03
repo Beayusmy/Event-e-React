@@ -1,88 +1,81 @@
-.main_login {
+
+.main_login{
     display: flex;
-    height: 100%;
+    height: 100vh;
+}
+
+
+.banner{
+    background-image: url(../../assests/img/bannerlogin.png) ;
+    flex: 1;
+    background-color: #B51D44;
+    background-position: center;
+
+    background-repeat: no-repeat;
+}
+
+
+.section_login{
+    flex: 1;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.form_login{
     color: white;
-}
-
-.section_login {
-    width: 50%;
-    height: 100vh;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.banner_login {
-    background-color: #570000;
-    width: 50%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-
-.main_login img {
-    width: 350px;
-    
-}
-
-.form_login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 100px;
-    height: 50%;
     width: 70%;
-
+    height: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
 }
+
+.form_login a{
+    text-decoration: none;
+    color: #a6a0a0
+}
+
+
+
+.campos_login{
+    width: 100%;
+    margin-top: 50px;
+}
+
 
 .campo_input{
     display: flex;
     flex-direction: column;
-    margin-bottom: 55px;
-  
+    margin-bottom: 20px;
 }
 
-.campos_login{
-    width: 100%;
-     
-}
 
 .campo_input input{
-    color: #A6A0A0;
     height: 30px;
-    padding: 1px 10px;
+    padding: 0px 10px;
     outline: none;
-    margin-top: 7px;
     border-top: none;
     border-left: none;
     border-right: none;
-    border-color: rgb(44, 43, 43);
-    
+    margin-top: 7px;
+
 }
 
-.botao{
-    margin-top: 50px;
-}
 
-.esqueceu_Senha a{
-     color: #817d7d;
-     font-size: small;
-     text-decoration: none;
-}
 
-/* RESPONSIVIDADE */
-/* Me de algumas caracteristicas a partir de um tamanho de tela */
-@media screen and (max-width: 768px){
-    .banner_login {
+ @media screen and (max-width: 530px){
+
+    .banner{
         display: none;
     }
+ }
 
-    .section_login {
-        width: 100%;
-    }
+    .campos_cadastro,
+    .campo_cad_nome{
+    padding: 0px 0px 0px 0px;
 }
