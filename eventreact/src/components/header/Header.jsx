@@ -1,34 +1,26 @@
-
 import "./Header.css"
-import Logo from "../../assests/img/logo.svg";
-import Adm from "../../assests/img/simboloAdm.png"
-import {Link} from "react-router-dom"
+import Logo1 from "../../assets/img/logo1.svg"
+import administracao from "../../assets/img/administracao.png"
 
 
-
-const Header = () => {
-    return(
+const Header = (props) => {
+    return (
         <header>
-        <div className="layout_grid cabecalho">
-        {/* /* ao clicar no link redireciona para tela Login */} 
-        
-        <Link to="/">
-        <img src= {Logo} alt= "Logo Event" />
-        </Link>
-       
-     <nav className="nav_header">
-        <Link to="/TipoEvento" className="link_header" href="">Home</Link>
-        <Link to="/Evento" className="link_header" href="">Eventos</Link>
-        <Link to="/TipoUsuario" className="link_header" href="">Usuarios</Link>
-        <Link to="/Contatos" className="link_header" href="">Contatos</Link>
-    </nav>
+            <div className=" cabecalho">
+                <img src={Logo1} alt="Logo Evento" />
+                <nav className="nav_header">
+                    <a href="" className="link_header">Home</a>
+                    <a href="" className="link_header">Eventos</a>
+                    <a href="" className="link_header">Usuários</a>
+                    <a href="" className="link_header">Contatos</a>
+                </nav>
+                <div className="Adm">
+                    <a href="" className="link_header">{props.nomeusu}</a>
+                    <img src={administracao} alt="Vetor" />
+                </div>
 
-    <div className="div_adm">
-         <Link to="/Administrador" className="link_header" href="">Administrador</Link>
-    </div>
-        <img className="adm" src={Adm}/>
- </div>
-</header>
+            </div>
+        </header>
     )
 }
 

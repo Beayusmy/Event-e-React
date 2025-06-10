@@ -1,11 +1,9 @@
-
 import "./Botao.css"
 
-const Login = (props) => {
+const Botao = (props) => {
     return(
-        <button className="botao">{props.nomeBotao}</button>
-
+        <button className="botao" type="submmit">{props.nomeDoBotao}</button>
     )
 }
 
-export default Login;
+export default Botao;

@@ -1,26 +1,26 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "../pages/login/Login";
-import CadastroEvento from "../pages/cadastroEvento/CadastroEvento";
-import CadastroTipoEvento from "../pages/cadastroTipoEvento/CadastroTipoEvento";
-import CadastroTipoUsuario from "../pages/cadastroTipoUsuario/CadastroTipoUsuario";
-import ListaEvento from "../pages/listaEvento/ListaEvento"
+
+import CadastroEvento from "../pages/cadastroEvento/cadastroEvento";
+import CadastroTipoEvento from "../pages/cadastroTipoEvento/cadastroTipoEvento"
+import CadastroTipoUsuario from "../pages/cadastroTipoUsuario/cadastroTipoUsuario"
+import Login from "../pages/login/Login"
+import ListagemEventos from "../pages/listagemDeEvento/ListagemDeEvento";
 
 const Rotas = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Login/>} exact/>
-                
-                <Route path="/Login" element={<Login/>} exact/>
+    return(
+        <BrowserRouter >
+        <Routes>
+            <Route path="/" element={<Login />} exact/>
+            <Route path="/ListaEvento" element={<ListagemEventos/>} />
+            <Route path="/Evento" element={<CadastroEvento />} />
+            <Route path="/TipoEvento" element={<CadastroTipoEvento />} />
+            <Route path="/TipoUsuario" element={<CadastroTipoUsuario />} />
+          
 
-                <Route path="/TipoEvento" element={<CadastroTipoEvento/>}/>
 
-                <Route path="/Evento" element={<CadastroEvento/>}/>
 
-                <Route path="/TipoUsuario" element={<CadastroTipoUsuario/>}/>
 
-                <Route path="/ListaEvento" element = {<ListaEvento/>}/>
-            </Routes>
+        </Routes>
         </BrowserRouter>
     )
 }

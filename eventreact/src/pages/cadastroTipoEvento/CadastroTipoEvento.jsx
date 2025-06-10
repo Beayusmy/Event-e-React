@@ -1,40 +1,20 @@
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
-import Lista from "../../components/lista/Lista";
 import Cadastro from "../../components/cadastro/Cadastro";
-import Img from "../../assests/img/cadastrotipoevento.png"
-import api from "../../Services/services";
-import { useState, useEffect } from "react";
-import Swal from 'sweetalert2';
+import Lista from "../../components/lista/Lista";
+import Banner from "../../assets/img/evento.png"
 
+import api from "../../Services/services"
+import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 const CadastroTipoEvento = () => {
 
-    const [tipoEvento, setTipoEvento] = useState("")
-    const [listaTipoEvento, setListaTipoEvento] = useState([])
-
+    const [tipoEvento, setTipoEvento] = useState("");
+    const [listaTipoEvento, setListaTipoEvento] = useState([]);
+    // const [atualizaTipoEvento, setAtualizarTipoEvento] = useState(false);
 
     function alertar(icone, mensagem) {
-
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your file has been deleted.",
-                    icon: "success"
-                });
-            }
-        });
-
-        //----------alertarAAAA SUCESSO--------------------------------------------
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -50,130 +30,146 @@ const CadastroTipoEvento = () => {
             icon: icone,
             title: mensagem
         });
-
     }
 
     async function cadastrarTipoEvento(evt) {
+
         evt.preventDefault();
 
-        if (tipoEvento.trim() != "") {
-
+        if (tipoEvento.trim() !== "") {
             try {
-
-                await api.post("tiposEventos", { tituloTipoEvento: tipoEvento });
-                alertar("success", "Cadastrado com sucesso!")
-                setTipoEvento("");
+                await api.post("tiposEventos", { tituloTipoEvento: tipoEvento })
+                alertar("success", "Sucesso! Cadastro realizado com sucesso!");
+                setTipoEvento("")
 
             } catch (error) {
                 console.log(error);
-                alertar("error", "Erro ao cadastrar! Entre em contato")
 
             }
         } else {
-            alertar("error", "Preencha o campo!")
+            alertar("error", "Erro! Preencha os campos")
         }
-
     }
 
 
     async function listarTipoEvento() {
         try {
-
             const resposta = await api.get("tiposEventos");
             setListaTipoEvento(resposta.data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
 
-    async function deletarTipoEvento(tipoeventoId) {
-        try {
+    async function excluirTipoEvento(idTipoEvento) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: true
+        });
 
-            Swal.fire({
-                title: "Você tem certeza?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sim, delete isso!"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    await api.delete(`tiposEventos/${tipoeventoId.idTipoEvento}`);
-                    alertar("success", "Gênero Excluido!")
-                }
-            });
-
-        } catch (error) {
-            console.log(error);
-            alertar("error", "Erro ao Excluir!");
-        };
-
+        const result = await swalWithBootstrapButtons.fire({
+            title: "Você tem certeza?",
+            text: "Não será possível reverter!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, deletar!",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true
+        });
+        if (result.isConfirmed) {
+            try {
+                await api.delete(`tiposEventos/${idTipoEvento}`);
+                swalWithBootstrapButtons.fire(
+                    "Deletado!",
+                    "O evento foi deletado com sucesso.",
+                    "success"
+                );
+                listarTipoEvento();
+            } catch (error) {
+                console.log(error);
+                Swal.fire("Erro!", "Não foi possível deletar o evento.", "error");
+            }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire(
+                "Cancelado",
+                "O evento não foi deletado.",
+                "error"
+            );
+        }
     }
 
-
-    async function editarTipoEvento(tipoEvento) {
+    async function atualizarTipoEvento(tipoEvento) {
+        console.log(tipoEvento);
 
         const { value: novoTipoEvento } = await Swal.fire({
-            title: "Edite seu evento",
+            title: "Digite o novo gênero",
             input: "text",
-            inputLabel: "Novo Tipo Evento",
+            inputLabel: "Novo gênero",
             inputValue: tipoEvento.tituloTipoEvento,
             showCancelButton: true,
             inputValidator: (value) => {
                 if (!value) {
-                    return "O campo precisa estar preenchido!";
+                    return "O campo não pode estar vazio!";
                 }
             }
         });
+
         if (novoTipoEvento) {
             try {
-                api.put(`tiposEventos/${tipoEvento.idTipoEvento}`, { tituloTipoEvento: novoTipoEvento });
-                Swal.fire(`O evento modificado ${novoTipoEvento}`);
-            } catch (error) {
-                console.log(error);
+                console.log("Antigo:", tipoEvento.tituloTipoEvento);
+                console.log("Novo:", novoTipoEvento);
 
+                await api.put(`tiposEventos/${tipoEvento.idTipoEvento}`, {
+                    tituloTipoEvento: novoTipoEvento
+                });
+
+
+                Swal.fire(`Evento modificado para: ${novoTipoEvento}`);
+            } catch (error) {
+                console.error("Erro ao atualizar:", error);
             }
         }
     }
 
+    
+
     useEffect(() => {
-        listarTipoEvento()
+        listarTipoEvento();
     }, [listaTipoEvento]);
+
 
     return (
         <>
-            <Header />
+            <Header nomeusu="Administrador" />
             <main>
                 <Cadastro
-                    tituloCadastro="Cadastro Tipo De Eventos"
+                    tituloCadastro="Cadastro Tipo de Eventos"
+                    namePlace="Titulo"
                     visibilidade="none"
-                    NomeBotao="Cadastrar"
-                    img_banner={Img}
-                    campoPlaceholder="Titulo"
-
+                    imagem={Banner}
                     funcCadastro={cadastrarTipoEvento}
-
                     valorInput={tipoEvento}
                     setValorInput={setTipoEvento}
                 />
 
                 <Lista
-
-                    listatitulo="Lista Tipo De Eventos"
-                    titulocoluna="Titulo"
-                    // titulo="Tipo Evento"
-                    // titulo1="Titulo Evento"
-
+                   titulo="Lista tipo de Eventos"
                     lista={listaTipoEvento}
-                    tipoLista="TiposEventos"
-
-                    funcExcluir={deletarTipoEvento}
-                    funcEditar={editarTipoEvento}
-                    visibilidade2="none"
+                    chaveNome="tituloTipoEvento"
+                    chaveId="idTipoEvento"
+                    nomePlace="Titulo"
+                    visibilidade="table-cell"
+                    funcEditar={atualizarTipoEvento}
+                    funcExcluir={excluirTipoEvento}
+                    titulocoluna1= "Titulo"
+                    
+                    titulocoluna3= "Editar"
+                    titulocoluna4= "Excluir"
                 />
-
-
 
             </main>
             <Footer />
