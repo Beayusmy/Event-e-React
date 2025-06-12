@@ -1,86 +1,94 @@
-import imgDeletar from "../../assets/img/imgDeletar.png"
-import api from "../../Services/services"
 import { useEffect, useState } from "react";
-import "./Modal.css"
 
+import ImgDeletar from "../../assets/img/lixeira.png";
+
+import "./Modal.css";
+
+import api from "../../Services/services";
 
 const Modal = (props) => {
 
-  const [comentarios, setComentarios] = useState([]);
-  const [usuarioId, setUsuarioId] = useState("5DFBD257-AA7E-4067-8B7B-CDEE2A6C406C")
-  const [novoComentario, setNovoComentario] = useState ("")
+    const [comentarios, setComentarios] = useState([]);
 
-  async function listarComentarios() {
-    try {
-      const resposta = await api.get(`ComentariosEventos/ListarSomenteExibe?id=${props.idEvento}`)
+    const [novoComentario, setNovoComentario] = useState("");
 
-      setComentarios(resposta.data);
+    const [usuarioId, setUsuarioId] = useState("817B69EB-ECFE-4E39-B872-F2871AF79756")
 
-    } catch (error) {
-      console.log(error);
 
+    async function listarComentarios() {
+        try {
+            const resposta = await api.get(`ComentariosEventos/ListarSomenteExibe?id=${props.idEvento}`);
+
+            setComentarios(resposta.data);
+
+            console.log(resposta.data);
+            
+
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
-  }
 
-  useEffect(() => {
-    listarComentarios();
-  }, [])
+    useEffect(() => {
+        listarComentarios();
+    }, [comentarios])
 
-    async function cadastrarComentarios(comentario) {
-      try {
-        await api.post("ComentariosEventos", {idUsuario: usuarioId, idEvento: props.idEvento, Descricao: comentario})
-      } catch (error) {
-        console.log(error);
-        
-      }
+    async function cadastrarComentario(comentario) {        
+        try {
+            await api.post("ComentariosEventos",{
+                idUsuario: usuarioId , 
+                idEvento: props.idEvento, 
+                descricao: comentario})
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async function deletarComentario(idComentario) {
-      try {
-        await api.delete(`ComentariosEventos/${idComentario}`);
-      } catch (error) {
-        console.log(error);
-        
-      }
+         try {
+            await api.delete(`ComentariosEventos/${idComentario}`);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-  return (
-    <>
-      <div className="model-overlay" onClick={props.fecharModal}></div>
-      <div className="model">
-        <h1>{props.titulo}</h1>
-        <div className="model_conteudo">
-          {props.tipoModel === "descricaoEvento" ? (
-            <p>{props.descricao}</p>
-          ) : (
-            <>
-              {comentarios.map((item) => 
-                <div key={item.idComentarioEvento}>
-                  <strong>{item.usuario.nomeUsuario}
-                  </strong>
-                  <img src={imgDeletar} alt="Deletar" onClick={() => deletarComentario(item.idComentarioEvento)}/>
-                  <p>{item.descricao}</p>
-                  <hr />
+
+
+
+    return (
+        <>
+            <div className="model-overlay" onClick={props.fecharModal}></div>
+            <div className="model">
+                <h1>{props.titulo}</h1>
+                <div className="model_conteudo">
+                    {props.tipoModel === "descricaoEvento" ? (
+                        <p>{props.descricao}</p>
+                    ) : (
+                        <>
+                            {comentarios.map((item) => (
+                                <div key={item.idComentarioEvento}>
+                                    <strong>{item.usuario.nomeUsuario}</strong>
+                                    <img src={ImgDeletar} alt="Deletar" 
+                                     onClick={() => deletarComentario(item.idComentarioEvento)}/>
+                                    <p>{item.descricao}</p>
+                                    <hr />
+                                </div>
+                            ))}
+                            <div>
+                                <input type="text" placeholder="Escreva seu comentário..." 
+                                value={novoComentario}
+                                onChange={(e)=>setNovoComentario(e.target.value)}/>
+                                <button onClick={() => cadastrarComentario(novoComentario)}>
+                                    Cadastrar
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </div>
-              )}
-              <div>
-                <input type="text"
-                  placeholder="Escreva seu comentario..." 
-                  value={novoComentario}
-                  onChange={(e) => setNovoComentario(e.target.value)}/>
-                <button onClick={() => cadastrarComentarios (novoComentario)}>
-                  Cadastrar
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </>
-  )
+            </div>
+        </>
+    )
 }
 
-export default Modal;
-
-
-
+export default Modal

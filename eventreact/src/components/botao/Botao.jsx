@@ -1,8 +1,8 @@
-import "./Botao.css"
+import "./Botao.css";
 
 const Botao = (props) => {
     return(
-        <button className="botao" type="submmit">{props.nomeDoBotao}</button>
+        <button type="submit" className="botao">{props.nomeBotao}</button>
     )
 }
 

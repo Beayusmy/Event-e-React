@@ -1,14 +1,16 @@
+// Importa a biblioteca 'axios', que é usada para fazer requisições HTTP de forma mais simples
 import axios from "axios";
 
-// Deixando o codigo mais limpo e facilitado na troca da porta caso haja mudancas.
-const apiPorta = "5289";
+// Define a porta onde a API local está rodando
+const apiPort = "5289";
 
-//apiLocal ela recebe o endereco da api.
-const apiLocal = `http://localhost:${apiPorta}/api/`
+// Monta a URL base para a API local, usando a porta definida
+const localApi = `http://localhost:${apiPort}/api/`;
 
-//Criamos um acesso que vai ter a base nossa api.
+//create => cria uma instancia do axios que está configurada com a porta da minha API
 const api = axios.create({
-    baseURL: apiLocal
+    baseURL : localApi
 });
 
+// Exporta a instância do axios para ser usada em outros arquivos do projeto
 export default api;
